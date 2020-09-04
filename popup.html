@@ -1,14 +1,48 @@
 
 <!DOCTYPE html>
 <html>
+<link rel = 'stylesheet' href="style.css";
 <body style="width: 300px">
-<div>
-    <h2>Testing</h2>
-    <p> Testing paragraph</p>
-    <p id="link"></p>
+
+<form id = 'wrap'>
+    <fieldset>
+        <div>
+
+        </div>
+        <div class = "mainbox">
+        <h3><legend>The Pomodingo Blocker</legend></h3>
+            <h3><p id="link"></p></h3>
+        <h3><label>Websites To Block:</label></h3>
+        </div>
+            <input type = "text"
+                   id = "myText"
+                   value = "Type here" />
+        <br>
+        <input type = "submit" id = "clickList" value = "Add">
+        <br>
+
+        <form action ="/popup.js" method = "get">
+            <label for = "websites">Remove a Website:</label>
+
+
+            <select id = "websites">
+                <option>None</option>
+            </select>
+        <button id="submit">Remove</button>
+        </form>
+
+    </fieldset>
+</form>
+<div class = 'holder'>
+    <label class = 'switch'>
+        <input type="checkbox" id = "poweron">
+        <span class ='slider round'></span>
+    </label>
 </div>
 
-<button id="clickme">click me</button>
+<div class = "startbutton">
+    <button id="clickme">Start The Pomodingo Timer</button>
+</div>
 
 <script type="text/javascript" src="popup.js"></script>
 
