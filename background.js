@@ -14,6 +14,11 @@ var sitesLength = sites.length;
 // var CountDown = new Date();
 // var WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 25);
 
+var startAlarm = new Audio();
+startAlarm.src ="get-outta-here.mp3";
+var breakAlarm = new Audio();
+breakAlarm.src ="done-for-you.mp3";
+
 
 function myLoop() {
     block()
@@ -47,10 +52,12 @@ function longBreak(){
 
 
 function alertfunc(){
+    breakAlarm.play();
     alert("Break Time")
 }
 
 function worktime(){
+    startAlarm.play();
     alert("Work Time!")
 }
 
@@ -65,7 +72,6 @@ function work(){
 function block(){
     worktime();
 
-    //chrome.webRequest.onBeforeRequest.addListener(
     chrome.storage.local.get('block', function(result){
         var myUrls = result.block || ["*://www.whatever.com/*"];
         chrome.webRequest.onBeforeRequest.addListener(
@@ -76,20 +82,7 @@ function block(){
         }
     )}
 
-        //alert(sites + "this is in the block function"),
-//         x,
-//         //{urls: ["*://www.facebook.com/*", "*://www.reddit.com/*"]},
-//         {urls: [sites.toString()]},
-//         //{urls: sites},
-//         ["blocking"]);
-//
-// }
 
-// function testSites(){
-//     for(i in sitesLength){
-//
-//     }
-// }
 
 function unblock(){
     alertfunc();
@@ -165,6 +158,10 @@ chrome.runtime.onMessage.addListener(function(request, message){
             var data = request.ub;
             //alert(data + "THIS IS THE DATA IN ON MESSAGE FROM BACKGROUND.JS");
             var s = '*://www.'+data.toString()+'.com/*';
+            if(sites.includes('*://www.'+data.toString()+'.com/*')){
+                alert("Already Added");
+                return
+            }
             sites.push( '*://www.'+data+'.com/*');
             chrome.storage.local.set({block: sites}, function(){
                 alert("saved" + '*://www.'+data+'.com/*');

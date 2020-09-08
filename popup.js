@@ -4,6 +4,8 @@ var turnOn = false;
 var removeSite;
 var newUrlList;
 
+var selectList = [];
+
 chrome.storage.local.set({onOff: false}, function(){
 });
 //document.getElementById('wrap').style.display = 'none';
@@ -37,8 +39,19 @@ document.getElementById("clickme").addEventListener('click', function(){
 
 
 document.getElementById("clickList").addEventListener('click',function(){
-    addToList();
+
+    if(validateForm() === 0){
+        return;
+    }
+    else{
+        addToList();
+    }
+
     //alert(userBlock);
+})
+
+document.getElementById('myText').addEventListener('click', function(){
+    clearSelection();
 })
 
 document.getElementById("websites").addEventListener('click',function(){
@@ -91,18 +104,39 @@ function getList(){
     chrome.storage.local.get('block', function(result){
         var myUrls = result.block || ["*://www.whatever.com/*"];
         var select = document.getElementById('websites');
-        for(var z = 0; z < myUrls.length; z++){
-            var opt = myUrls[z];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = opt;
-            el.id = "removal";
-            el.tagName = opt;
-            select.appendChild(el);
-            //alert(el.textContent);
-        }
+        var alreadySelect = document.getElementById('websites').options;
 
 
+
+            for(var z = 0; z < myUrls.length; z++){
+                var opt = myUrls[z];
+
+
+
+                for(var y = 0; y < myUrls.length; y++ ){
+                    //alert(document.getElementById("websites").options[z].text)
+                    if(selectList[y] !== myUrls[z]){
+                        var el = document.createElement("option");
+                        el.textContent = opt;
+                        el.value = opt;
+                        el.id = "removal";
+                        el.tagName = opt;
+                        //alert(opt + "opt");
+                        selectList.push(opt);
+                        select.appendChild(el);
+                        //alert(el.textContent);
+                        return;
+                    }
+
+                    if(selectList[y] === myUrls[z]){
+
+                        return;
+                    }
+
+
+                }
+
+            }
     })
 
 }
@@ -176,6 +210,28 @@ document.getElementById("submit").addEventListener('click', function(){
 
 
 
+function containsObject(obj, list){
+    var h;
+    for (h = 0; h < list.length; h++){
+        if(list[h] === obj){
+            return true;
+        }
+    }
+    return false;
+}
 
+function validateForm(){
+    var uInput = document.getElementById('myText').value;
+    if( uInput === ""){
+        alert("You didn't enter a website!")
+        return 0;
+    }
+}
 
+function clearSelection(){
+    var uInput = document.getElementById('myText').value;
+    if(document.getElementById('myText').value === "Type here"){
+        document.getElementById('myText').value = "";
+    }
 
+}

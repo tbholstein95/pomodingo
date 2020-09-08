@@ -3,11 +3,13 @@
   "version": "1.0",
   "description": "Block websites until it is time for a brain break",
   "manifest_version": 2,
-  "permissions": ["webRequest","webRequestBlocking", "<all_urls>", "storage"],
+  "permissions": ["webRequest","webRequestBlocking", "<all_urls>", "storage", "notifications"],
   "background": {
     "scripts": [
-      "background.js"]
+      "background.js"],
+    "web_accessible_resources": [ "*.mp3" ]
   },
+
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_popup": "popup.html",

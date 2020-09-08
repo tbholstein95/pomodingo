@@ -80,3 +80,11 @@ input:checked + .slider:before{
     /*align-items: center;*/
 
 }
+
+#myForm select {
+    width:200px;
+    float: none;
+}
+
+#myForm select:focus {
+    width:auto; }

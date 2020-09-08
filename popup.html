@@ -14,21 +14,23 @@
             <h3><p id="link"></p></h3>
         <h3><label>Websites To Block:</label></h3>
         </div>
-            <input type = "text"
-                   id = "myText"
-                   value = "Type here" />
-        <br>
-        <input type = "submit" id = "clickList" value = "Add">
+        <div><input type = "text"
+                    id = "myText"
+                    value = "Type here"
+                    size = "16" />
+            <input type = "submit" id = "clickList" value = "Add"></div>
+
         <br>
 
         <form action ="/popup.js" method = "get">
             <label for = "websites">Remove a Website:</label>
 
+                <select id = "websites" style = "width: 150px" >
+                    <option>None</option>
+                </select>
+                <br>
+                <button id="submit">Remove</button>
 
-            <select id = "websites">
-                <option>None</option>
-            </select>
-        <button id="submit">Remove</button>
         </form>
 
     </fieldset>
