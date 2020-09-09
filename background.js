@@ -10,10 +10,10 @@ var i = 0;
 var sites = [];
 var list =[]
 var sitesLength = sites.length;
+var select = document.getElementById('websites');
 
-// var CountDown = new Date();
-// var WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 25);
 
+//mp3
 var startAlarm = new Audio();
 startAlarm.src ="get-outta-here.mp3";
 var breakAlarm = new Audio();
@@ -34,7 +34,6 @@ function myLoop() {
         }
         a += 1
     }, 5000)
-
 }
 
 function longBreak(){
@@ -47,9 +46,7 @@ function longBreak(){
             setTimeout(myLoop, 10000)
         }
     }, 5000)
-
 }
-
 
 function alertfunc(){
     breakAlarm.play();
@@ -75,14 +72,11 @@ function block(){
     chrome.storage.local.get('block', function(result){
         var myUrls = result.block || ["*://www.whatever.com/*"];
         chrome.webRequest.onBeforeRequest.addListener(
-
             x,
             {urls: myUrls},
             ["blocking"])
         }
     )}
-
-
 
 function unblock(){
     alertfunc();
@@ -98,7 +92,6 @@ function alertLongBreak(){
     alert('Long Break!')
 }
 
-
 let CountDown;
 let WorkTime;
 let distance;
@@ -108,55 +101,18 @@ var timerTime;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
     if(request.cmd === 'START_TIMER'){
         setinter();
-        // CountDown = new Date();
-        // WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 1);
-        // block();
-        // setInterval(function() {
-        //     var current_date = new Date().getTime();
-        //
-        //     // Calculate Seconds Left
-        //     var distance = (WorkTime - current_date);
-        //
-        //     //calculate minutes left
-        //     minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        //     seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        //
-        //     chrome.storage.local.set({'min':  minutes}, function() {
-        //         console.log("you saved me!");
-        //     });
-        //
-        //     chrome.storage.local.set({'sec':  seconds}, function() {
-        //         console.log("you savedssec!");
-        //     });
-        //
-        //     //Finish
-        //     if (distance < 0){
-        //         clearInterval();
-        //         unblock();
-        //
-        //         //document.getElementById("link").innerHTML = "EXPIRED";
-        //     }
-        //
-        //
-        //
-        // }, 1000)
     }
     else if (request.cmd === 'GET_TIME'){
         chrome.storage.local.get(['sec'], function(result){
-
-            //alert(result.sec +" seconds")
             sendResponse({ time: result.sec })
         });
         return true;
-
-
     }
 })
 
 chrome.runtime.onMessage.addListener(function(request, message){
         if(request.method === "adding"){
             var data = request.ub;
-            //alert(data + "THIS IS THE DATA IN ON MESSAGE FROM BACKGROUND.JS");
             var s = '*://www.'+data.toString()+'.com/*';
             if(sites.includes('*://www.'+data.toString()+'.com/*')){
                 alert("Already Added");
@@ -164,35 +120,11 @@ chrome.runtime.onMessage.addListener(function(request, message){
             }
             sites.push( '*://www.'+data+'.com/*');
             chrome.storage.local.set({block: sites}, function(){
+
                 alert("saved" + '*://www.'+data+'.com/*');
             });
-            //sendResponse('thank you');
-            //alert(s + "background.js alert")
         }
-
-
 });
-
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
-//         var data = request
-//         alert(data + "THIS IS THE DATA IN ON MESSAGE FROM BACKGROUND.JS");
-//         var s = '*://www.'+data.toString()+'.com/*';
-//         sites[sites.length] = s;
-//         //sendResponse('thank you');
-//         alert(s + "background.js alert")
-//
-// });
-
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
-//     if(request.cmd === 'GET_TIME'){
-//         chrome.storage.local.get(['sec'], function(result){
-//             alert(result.sec +" seconds")
-//         });
-//     }
-// })
-
-
-
 
 function store(){
     chrome.storage.local.set({min:  minutes}, function() {
@@ -208,109 +140,23 @@ function getminutes(){
     });
 }
 
-
-// function t(){
-//      setInterval(function() {
-//         var current_date = new Date().getTime();
-//
-//         // Calculate Seconds Left
-//         var distance = (WorkTime - current_date);
-//
-//         //calculate minutes left
-//         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-//         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-//
-//         //display
-//
-//
-//         // function timer(){
-//         //     document.getElementById("link").innerHTML = minutes + "m " + seconds + "s " + "hi";
-//         // }
-//         // document.getElementById("clickme").addEventListener("click", function(){
-//         //     document.getElementById("link").innerHTML = minutes + "m " + seconds + "s ";
-//         // })
-//         // document.getElementById("clickme").onclick = timer;
-//         //
-//         // var test = document.getElementById("link").innerHTML = minutes + "m " + seconds + "s ";
-//         // document.getElementById("link").innerHTML = test;
-//
-//         //Finish
-//         if (distance < 0){
-//             clearInterval(t);
-//             document.getElementById("link").innerHTML = "EXPIRED";
-//         }
-//
-//         document.getElementById("link").innerHTML = minutes + "m " + seconds + "s " + "hi";
-//     }, 1000)
-//
-// }
-
-//myLoop();
-
 function setTimer() {
     block();
     CountDown = new Date();
     WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 1);
     return new Promise(resolve =>{var t = setInterval(function () {
-        var current_date = new Date().getTime();
-
-        // Calculate Seconds Left
-        var distance = (WorkTime - current_date);
-
-        //calculate minutes left
-        minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        chrome.storage.local.set({'min': minutes}, function () {
-            console.log("you saved me!");
-        });
-
-        chrome.storage.local.set({'sec': seconds}, function () {
-            console.log("you savedssec!");
-        });
-
-        //Finish
-        if (distance <= 0) {
-            clearInterval(t);
-            //unblock();
-            resolve("finish")
-            //document.getElementById("link").innerHTML = "EXPIRED";
-        }
+        genSetTime(resolve, t);
     }, 1000)})
-
-
 }
+
 function setBreak() {
     CountDown = new Date();
     WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 1);
     unblock();
     return new Promise(resolve => {var t = setInterval(function () {
-        var current_date = new Date().getTime();
+        genSetTime(resolve, t);
 
-        // Calculate Seconds Left
-        var distance = (WorkTime - current_date);
-
-        //calculate minutes left
-        minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        chrome.storage.local.set({'min': minutes}, function () {
-            console.log("you saved me!");
-        });
-
-        chrome.storage.local.set({'sec': seconds}, function () {
-            console.log("you savedssec!");
-        });
-
-        //Finish
-        if (distance <= 0) {
-            clearInterval(t);
-            //unblock();
-            resolve("finish")
-            //document.getElementById("link").innerHTML = "EXPIRED";
-        }
     }, 1000)})
-
 }
 
 function setLongBreak(){
@@ -318,38 +164,13 @@ function setLongBreak(){
     WorkTime = CountDown.setMinutes(CountDown.getMinutes() + 2);
     unblockLong();
     return new Promise(resolve => {var t = setInterval(function () {
-        var current_date = new Date().getTime();
-
-        // Calculate Seconds Left
-        var distance = (WorkTime - current_date);
-
-        //calculate minutes left
-        minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        chrome.storage.local.set({'min': minutes}, function () {
-            console.log("you saved me!");
-        });
-
-        chrome.storage.local.set({'sec': seconds}, function () {
-            console.log("you savedssec!");
-        });
-
-        //Finish
-        if (distance <= 0) {
-            count = 0;
-            clearInterval(t);
-            //unblock();
-            resolve("finish")
-            //document.getElementById("link").innerHTML = "EXPIRED";
-        }
+        genSetTime(resolve, t);
     }, 1000)})
 }
 
 async function setinter(){
     var count = 0;
     do{
-
         if(count === 0 || count === 2 || count === 4 || count === 6){
             await setTimer();
             count += 1;
@@ -360,7 +181,6 @@ async function setinter(){
             count +=1;
             alert(count);
         }
-
         if(count === 7){
             await setLongBreak();
             count = 0;
@@ -372,8 +192,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.cmd === 'needData') {
         sendResponse(sites)
     }
-
     })
+}
 
+function genSetTime(resolve, setInt){
+    var current_date = new Date().getTime();
+
+    // Calculate Seconds Left
+    var distance = (WorkTime - current_date);
+
+    //calculate minutes left
+    minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    chrome.storage.local.set({'min': minutes}, function () {
+        console.log("you saved me!");
+    });
+
+    chrome.storage.local.set({'sec': seconds}, function () {
+        console.log("you savedssec!");
+    });
+
+    //Finish
+    if (distance <= 0) {
+        count = 0;
+        clearInterval(setInt);
+        resolve("finish")
+    }
 }
 

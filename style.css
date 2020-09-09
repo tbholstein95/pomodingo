@@ -81,10 +81,11 @@ input:checked + .slider:before{
 
 }
 
+/*
 #myForm select {
     width:200px;
     float: none;
 }
 
 #myForm select:focus {
-    width:auto; }
+    width:auto; }*/
