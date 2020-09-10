@@ -102,7 +102,6 @@ chrome.storage.local.get(['displayTime'], function(result){
 
 
 function getList(){
-
     chrome.storage.local.get('block', function(result){
         for(f=0; f<result.block.length;f++){
             if(tempHolder.includes(result.block[f])){

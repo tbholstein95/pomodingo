@@ -6,9 +6,6 @@
 
 <form id = 'wrap'>
     <fieldset>
-        <div>
-
-        </div>
         <div class = "mainbox">
         <h3><legend>The Pomodingo Blocker</legend></h3>
             <h3><p id="link"></p></h3>
@@ -18,23 +15,22 @@
                     id = "myText"
                     value = "Type here"
                     size = "16" />
-            <input type = "submit" id = "clickList" value = "Add"></div>
+             <input type = "submit" id = "clickList" value = "Add">
+        </div>
 
         <br>
 
         <form action ="/popup.js" method = "get">
             <label for = "websites">Remove a Website:</label>
-
                 <select id = "websites"> <!--style = "width: 150px"-->
                     <option>None</option>
                 </select>
                 <br>
                 <button id="submit">Remove</button>
-
         </form>
-
     </fieldset>
 </form>
+
 <div class = 'holder'>
     <label class = 'switch'>
         <input type="checkbox" id = "poweron">
@@ -47,7 +43,6 @@
 </div>
 
 <script type="text/javascript" src="popup.js"></script>
-<!--//<script src="background.js"></--><!--script>-->
 
 </body>
 </html>
