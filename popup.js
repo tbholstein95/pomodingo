@@ -1,36 +1,24 @@
-
-blocktest = []
-var turnOn = false;
-var removeSite;
+//*************************Variables and What Not*********************************
 var newUrlList;
-
-var selectList = [];
 var show = document.getElementById("link").style.display;
-var displayTime;
-
-
-
+var tempHolder = []
+var displayCheck;
 
 chrome.storage.local.set({onOff: false}, function(){
 });
 
-function startTimer(time){
-                document.getElementById("link").innerHTML = time
+chrome.storage.local.get(['displayCheck'], function(result) {
+    if (result.displayCheck === 1){
 
-            }
-
-
-function startTime(time){
-    chrome.runtime.sendMessage({ cmd: 'START_TIMER', when : time});
-    document.getElementById('link').innerHTML = time;
-    chrome.storage.local.set({displayTime: true})
-    document.getElementById('link').style.visibility = "none";
-
-}
+        document.getElementById("link").style.display = "block";
+    }
+    else{
+        document.getElementById('link').style.display = "none";
+    }
+})
 
 
-
-//Listeners******
+//**************************************************************Listeners**********************************************
 document.getElementById("clickme").addEventListener('click', function(){
     startTime();
 })
@@ -42,9 +30,7 @@ document.getElementById("clickList").addEventListener('click',function(){
     }
     else{
         addToList();
-
     }
-
 })
 
 document.getElementById('myText').addEventListener('click', function(){
@@ -53,29 +39,54 @@ document.getElementById('myText').addEventListener('click', function(){
 
 document.getElementById("websites").addEventListener('click',function(){
     getList();
-    turnOn = true;
 })
 
 document.getElementById('poweron').addEventListener('click', function(){
 
     chrome.storage.local.get(['onOff'], function(result){
-        alert(result.onOff);
         if(result.onOff === true){
         }
         if(result.onOff === false){
             document.getElementById('wrap').style.display = 'none';
-            alert(result.onOff + "result")
             chrome.runtime.reload();
         }
     });
 })
-//
 
-//Functions*****
+document.getElementById("submit").addEventListener('click', function(){
+    var site = document.getElementById('websites').value;
+    alert(site);
+    chrome.storage.local.get('block', function(result){
+        var theList = result['block'];
+        if(theList.includes(site)){
+            var newUrlList = theList.filter(function(item){
+                if(item!== site){
+                }
+                return item !== site;
+
+            });
+            chrome.storage.local.set({ 'block': newUrlList});
+            chrome.runtime.reload();
+        }
+    })
+})
+
+
+//****************************************Functions**********************************************
+function startTimer(time){
+    document.getElementById("link").innerHTML = time
+}
+
+function startTime(time){
+    chrome.runtime.sendMessage({ cmd: 'START_TIMER', when : time});
+    document.getElementById('link').innerHTML = time;
+    chrome.storage.local.set({displayTime: true})
+    chrome.storage.local.set({displayCheck: 1})
+}
+
 function addToList(){
     var userBlock = document.getElementById("myText").value;
     chrome.runtime.sendMessage({method: "adding", ub: userBlock});
-
 }
 
 chrome.storage.local.get(['displayTime'], function(result){
@@ -86,95 +97,31 @@ chrome.storage.local.get(['displayTime'], function(result){
                 document.getElementById("link").innerHTML = result.min +"minutes" + result.sec + "seconds";
             })},1000)
     }
+
 })
 
 
 function getList(){
 
     chrome.storage.local.get('block', function(result){
-        var myUrls = result.block || ["*://www.whatever.com/*"];
-        var select = document.getElementById('websites');
-        var alreadySelect = document.getElementById('websites').options;
-        var length = select.options.length;
-        for(w = 0; w < length; w ++){
-            select.options[w] = null;
+        for(f=0; f<result.block.length;f++){
+            if(tempHolder.includes(result.block[f])){
+                return
+            }
+            else{
+                tempHolder.push(result.block[f]);
+            }
         }
-        for(var z = 0; z < myUrls.length; z++){
+        var myUrls = result.block;
+        var select = document.getElementById('websites');
+        for(var z = 0; z < myUrls.length; z++) {
             var opt = myUrls[z];
             var el = document.createElement("option");
             el.textContent = opt;
             el.value = opt;
-            el.id = "removal";
-            el.tagName = opt;
-            selectList.push(opt);
             select.appendChild(el);
-/*            for(var y = 0; y < myUrls.length; y++ ){
-                if(selectList[y] !== myUrls[z]){
-                    var el = document.createElement("option");
-                    el.textContent = opt;
-                    el.value = opt;
-                    el.id = "removal";
-                    el.tagName = opt;
-                    selectList.push(opt);
-                    select.appendChild(el);
-                    return;
-                }
-
-                if(selectList[y] === myUrls[z]){
-                    return;
-                }
-            }*/
         }
     })
-}
-
-if(turnOn === true){
-    remove();
-}
-
-function removeAllElements(array, elem) {
-    var index = array.indexOf(elem);
-    while (index > -1) {
-        array.splice(index, 1);
-        index = array.indexOf(elem);
-    }
-}
-
-const selectElement = document.querySelector('.websites');
-
-document.getElementById("submit").addEventListener('click', function(){
-    var testing = document.getElementById('websites').value;
-    alert(testing);
-    chrome.storage.local.get('block', function(result){
-        var theList = result['block'];
-        alert(theList+ "I AM THELIST");
-        alert(testing + "REMOVING ME");
-        if(theList.includes(testing)){
-            alert("SHIT");
-            var newUrlList = theList.filter(function(item){
-                if(item!== testing){
-                    alert("FOUND A GOOD ONE");
-                }
-                return item !== testing;
-
-            });
-            alert(newUrlList + "I AM NEWURLLIST")
-            chrome.storage.local.set({ 'block': newUrlList});
-            alert(newUrlList + "SET NEW URL LIST");
-            chrome.runtime.reload();
-        }
-        var myUrls = result.block || ["*://www.whatever.com/*"];
-    })
-})
-
-function containsObject(obj, list){
-    var h;
-    for (h = 0; h < list.length; h++){
-        if(list[h] === obj){
-            return true;
-        }
-    }
-    return false;
 }
 
 function validateForm(){
@@ -186,8 +133,8 @@ function validateForm(){
 }
 
 function clearSelection(){
-    var uInput = document.getElementById('myText').value;
     if(document.getElementById('myText').value === "Type here"){
         document.getElementById('myText').value = "";
     }
 }
+

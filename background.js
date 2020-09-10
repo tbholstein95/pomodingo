@@ -70,7 +70,7 @@ function block(){
     worktime();
 
     chrome.storage.local.get('block', function(result){
-        var myUrls = result.block || ["*://www.whatever.com/*"];
+        var myUrls = result.block;
         chrome.webRequest.onBeforeRequest.addListener(
             x,
             {urls: myUrls},
@@ -98,6 +98,7 @@ let distance;
 var minutes;
 var seconds;
 var timerTime;
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
     if(request.cmd === 'START_TIMER'){
         setinter();
