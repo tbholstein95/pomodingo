@@ -1,13 +1,13 @@
-#Pomodingo Timer and Blocker
+# Pomodingo Timer and Blocker
 
-##Description:
+## Description:
 This extension allows your to input the websites that distract you the most and block them for intervals of time, with
 built in breaks, to increase your productivity.
 
-##Installing
+## Installing
 To install the Pomodingo Timer and Blocker just upload this package in your Google Extension settings.
 
-##Using
+## Using
 To use the Pomodingo Tracker type a website's name into the field to add names and click Add. You can do this for each
 website you know will distract you.
 
